@@ -14,6 +14,22 @@ static int StartGraphic();
 
 static void EndGraphic();
 
+typedef struct ObjectList{
+	Object array[20];
+	size_t count; //надпись на курточке
+}ObjectList;
+
+ObjectList list;
+
+
+void MoveAndSlide(){
+	for(int i = 0; i < list.count; ++i){
+		list.array[i].position.x += list.array[i].direction.x;
+		list.array[i].position.y += list.array[i].direction.y;
+	}
+}
+
+
 int main(){
 	running = StartGraphic();
 	while(!running){
