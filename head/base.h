@@ -12,13 +12,73 @@ typedef struct Position2{
 	int x, y;
 }Position2;
 
-typedef struct Object{
+typedef struct Object Object;
+struct Object{
 	Position2 position;
-	Groups group;
 	Vector2 direction;
+	Group group;
 	Collider2 collider;
 	Sprite2 sprite;
-}Object;
+	Object *next, *head, *paretn;
 
+};
 
+Object MAIN;
+MAIN.head = NULL;
+
+void addChild(Object *parent, Object *child){
+	if(!child){
+		fprintf(stderr, "Child - NULL ptr\n");
+		return;
+	}
+	child->parent = parent;
+	if(!parent->head){
+		parent->head = child;
+		child->next = NULL;
+		return;
+	}
+	Object *buf = parent->head;
+	while(buf->next) buf = buf->next;
+	buf->next = child;
+
+}
+
+Object *initObject(){
+	Object *buf = calloc(sizeof(Object));
+	addChild(&MAIN, buf);
+	return buf;
+}
+
+Object *createObject(Position2 p, Vector2 v, Group g, Collider2 c, Sprite2 s){
+	Object *buf = malloc(sizeof(Object));
+	addChild(&MAIN, buf);
+	buf->position = p;
+	buf->direction = v;
+	buf->group = g;
+	buf->collider = c;
+	buf->sprite = s;
+	buf->next = NULL;
+	buf->head = NULL;
+	return buf;
+}
+
+void deleteObject(Object *delete){
+	if(!delete){
+		fprintf(stderr, "Delete - NULL ptr\n");
+		return;
+	}
+	if(!delete->parent){
+		fprintf(stderr, "Delete->parent - NULL ptr\n");
+		return;
+	}
+	if(delete->parent->head != delete){
+		Object *head = delete->parent->head;
+		while(head->next != delete) head = head->next;
+		head->next = delete->next;
+		free(delete);
+		return
+	}
+	delete->parent->head = delete->next;
+	free(delete);
+}
 
