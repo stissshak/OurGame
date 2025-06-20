@@ -92,3 +92,24 @@ void deleteObject(Object *delete){
 	free(delete);
 }
 
+void setPosition(Object *o, int x, int y){
+	o->position.x = x;
+	o->position.y = y;
+}
+
+void setDirection(Object *o, int x, int y){
+	o->direction.x = x;
+	o->direction.y = y;
+}
+
+void setGroup(Object *o, Group g){
+	o->group = g;
+}
+
+void setCollider(Object *o, int h, int w){
+	o->collider.hight = h;
+	o->collider.width = w;
+}
+
+void setSprite(Object *o){
+}
