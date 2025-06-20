@@ -14,25 +14,29 @@ static int StartGraphic();
 
 static void EndGraphic();
 
-typedef struct ObjectList{
-	Object array[20];
-	size_t count; //надпись на курточке
-}ObjectList;
 
-ObjectList list;
-
+void MNS(Object *buf){
+	if(!buf) return;
+	buf->position.x += buf->direction.x;
+	buf->position.y += buf->direction.y;
+	MNS(buf->next);
+	MNS(buf->head);
+}
 
 void MoveAndSlide(){
-	for(int i = 0; i < list.count; ++i){
-		list.array[i].position.x += list.array[i].direction.x;
-		list.array[i].position.y += list.array[i].direction.y;
+	Object *buf = MAIN.head;
+	if(!buf){
+		fprintf(stderr, "NO OBJECTS WAS CREATED");
+		return;	
 	}
+	MNS(buf);
 }
 
 
 int main(){
 	running = StartGraphic();
 	while(!running){
+		//InputCheck(); // Здесь ввод игрока
 		//MoveAndSlide(); // Здесь будет происходить движение всех объекток
 		//Collision();	// Проверка взаимодействия всех объектов
 		//Graphics();	// Отрисовка графики

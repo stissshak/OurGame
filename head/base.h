@@ -2,11 +2,13 @@
 #include "collider.h"
 #include "sprite.h"
 
-typedef enum Groups{
+//////////////////////////////////////// 
+
+typedef enum Group{
 	Players,
 	Bullets,
 	Map
-}Groups;
+}Group;
 
 typedef struct Position2{
 	int x, y;
@@ -19,12 +21,20 @@ struct Object{
 	Group group;
 	Collider2 collider;
 	Sprite2 sprite;
-	Object *next, *head, *paretn;
+	Object *next, *head, *parent;
 
 };
 
-Object MAIN;
-MAIN.head = NULL;
+///////////////////////////////////////
+
+void addChild(Object *, Object*);
+Object *initObject();
+Object *createObject(Position2, Vector2, Group, Collider2, Sprite2);
+void deleteObject(Object *);
+
+//////////////////////////////////////
+
+Object MAIN = {.head = NULL};
 
 void addChild(Object *parent, Object *child){
 	if(!child){
@@ -44,7 +54,7 @@ void addChild(Object *parent, Object *child){
 }
 
 Object *initObject(){
-	Object *buf = calloc(sizeof(Object));
+	Object *buf = calloc(1, sizeof(Object));
 	addChild(&MAIN, buf);
 	return buf;
 }
@@ -76,7 +86,7 @@ void deleteObject(Object *delete){
 		while(head->next != delete) head = head->next;
 		head->next = delete->next;
 		free(delete);
-		return
+		return;
 	}
 	delete->parent->head = delete->next;
 	free(delete);
